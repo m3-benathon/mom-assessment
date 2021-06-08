@@ -241,7 +241,7 @@ public class Controller {
 
 	@GetMapping("/households/getQualifyForBabySunshineGrant")
 	public List<Household> getQualifyForBabySunshineGrant(@RequestParam(required = false) List<String> housingTypes,
-			@RequestParam(required = false, defaultValue = "1") Integer householdSizeMin,
+			@RequestParam(required = false, defaultValue = "2") Integer householdSizeMin,
 			@RequestParam(required = false) Integer householdSizeMax,
 			@RequestParam(required = false) Double totalAnnualIncomeMin,
 			@RequestParam(required = false) Double totalAnnualIncomeMax) {
