@@ -1,0 +1,3 @@
+{
+    "housingType" : "HDB"
+}

@@ -1,0 +1,9 @@
+{
+    "name" : "Male 1",
+    "gender" : "Male",
+    "maritalStatus" : "Single",
+    "occupationType" : "Employed",
+    "annualIncome" : 12000,
+    "dateOfBirth" : "2000-01-01"
+    "spouse" : { "id" : 3 }
+}
