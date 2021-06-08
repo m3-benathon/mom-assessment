@@ -68,7 +68,7 @@ Grant Schemes APIs:
      2. householdSizeMax
      3. totalAnnualIncomeMin
      4. totalAnnualIncomeMax
-   - default will get all households with housing type that is HDB and at least 1 family member is above 50 years old
+   - default will get all households with housing type that is HDB and at least 1 family member that is above 50 years old
 4. Baby Sunshine Grant
    - available search parameters:
      1. housingTypes - available options: HDB, Landed, Condominium
