@@ -71,7 +71,7 @@ Grant Schemes API:
 4. Baby Sunshine Grant
    - available search parameters:
      1. housingTypes - available options: HDB, Landed, Condominium
-     2. householdSizeMin - default set as 1
+     2. householdSizeMin - default set as 2
      3. householdSizeMax
      4. totalAnnualIncomeMin
      5. totalAnnualIncomeMax
