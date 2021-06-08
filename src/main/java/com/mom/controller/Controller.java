@@ -1,5 +1,10 @@
 package com.mom.controller;
 
+import java.time.LocalDate;
+import java.time.Period;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,6 +19,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mom.exception.ResourceNotFoundException;
@@ -114,4 +120,150 @@ public class Controller {
 		response.put("deleted", Boolean.TRUE);
 		return response;
 	}
+
+	@GetMapping("/households/getQualifyForStudentEncouragementBonus")
+	public List<Household> getQualifyForStudentEncouragementBonus(
+			@RequestParam(required = false) List<String> housingTypes) {
+		Map<String, Object> searchParams = new HashMap<>();
+		if (housingTypes != null) {
+			searchParams.put("housingTypes", housingTypes);
+		}
+		List<Household> households = householdRepository.search(searchParams);
+		List<Household> qualifyForStudentEncouragementBonus = new ArrayList<>();
+
+		for (Household household : households) {
+			Double totalAnnualIncome = 0.0;
+			Boolean hasChildLessThan16 = false;
+			for (FamilyMember familyMember : household.getFamilyMembers()) {
+				totalAnnualIncome += familyMember.getAnnualIncome();
+				if (getAge(familyMember.getDateOfBirth()) < 16) {
+					hasChildLessThan16 = true;
+				}
+				if (totalAnnualIncome >= 150000) {
+					break;
+				}
+			}
+			if (hasChildLessThan16 && totalAnnualIncome < 150000) {
+				qualifyForStudentEncouragementBonus.add(household);
+			}
+		}
+
+		return qualifyForStudentEncouragementBonus;
+	}
+
+	@GetMapping("/households/getQualifyForFamilyTogethernessScheme")
+	public List<Household> getQualifyForFamilyTogethernessScheme(
+			@RequestParam(required = false) List<String> housingTypes) {
+		Map<String, Object> searchParams = new HashMap<>();
+		if (housingTypes != null) {
+			searchParams.put("housingTypes", housingTypes);
+		}
+		List<Household> households = householdRepository.search(searchParams);
+		List<Household> qualifyForFamilyTogethernessScheme = new ArrayList<>();
+
+		for (Household household : households) {
+			Boolean hasChildLessThan18 = false;
+			Boolean hasHusbandAndWife = false;
+			for (FamilyMember familyMember : household.getFamilyMembers()) {
+				if (getAge(familyMember.getDateOfBirth()) < 18) {
+					hasChildLessThan18 = true;
+				}
+				if (familyMember.getSpouse() != null) {
+					if ((familyMember.getGender().equals("Male") || familyMember.getSpouse().getGender().equals("Male"))
+							&& (familyMember.getGender().equals("Female")
+									|| familyMember.getSpouse().getGender().equals("Female"))) {
+						hasHusbandAndWife = true;
+					}
+				}
+				if (hasChildLessThan18 && hasHusbandAndWife) {
+					break;
+				}
+			}
+			if (hasChildLessThan18 && hasHusbandAndWife) {
+				qualifyForFamilyTogethernessScheme.add(household);
+			}
+		}
+
+		return qualifyForFamilyTogethernessScheme;
+	}
+
+	@GetMapping("/households/getQualifyForHDBElderBonus")
+	public List<Household> getQualifyForHDBElderBonus() {
+		Map<String, Object> searchParams = new HashMap<>();
+		List<String> housingTypes = new ArrayList<>();
+		housingTypes.add("HDB");
+		searchParams.put("housingTypes", housingTypes);
+
+		List<Household> households = householdRepository.search(searchParams);
+		List<Household> qualifyForHDBElderBonus = new ArrayList<>();
+
+		for (Household household : households) {
+			for (FamilyMember familyMember : household.getFamilyMembers()) {
+				if (getAge(familyMember.getDateOfBirth()) > 50) {
+					qualifyForHDBElderBonus.add(household);
+					break;
+				}
+			}
+		}
+
+		return qualifyForHDBElderBonus;
+	}
+
+	@GetMapping("/households/getQualifyForBabySunshineGrant")
+	public List<Household> getQualifyForBabySunshineGrant(@RequestParam(required = false) List<String> housingTypes) {
+		Map<String, Object> searchParams = new HashMap<>();
+		if (housingTypes != null) {
+			searchParams.put("housingTypes", housingTypes);
+		}
+
+		List<Household> households = householdRepository.search(searchParams);
+		List<Household> qualifyForBabySunshineGrant = new ArrayList<>();
+
+		for (Household household : households) {
+			for (FamilyMember familyMember : household.getFamilyMembers()) {
+				if (getAge(familyMember.getDateOfBirth()) < 5) {
+					qualifyForBabySunshineGrant.add(household);
+					break;
+				}
+			}
+		}
+
+		return qualifyForBabySunshineGrant;
+	}
+
+	@GetMapping("/households/getQualifyForYoloGstGrant")
+	public List<Household> getQualifyForYoloGstGrant() {
+		Map<String, Object> searchParams = new HashMap<>();
+		List<String> housingTypes = new ArrayList<>();
+		housingTypes.add("HDB");
+		searchParams.put("housingTypes", housingTypes);
+
+		List<Household> households = householdRepository.search(searchParams);
+		List<Household> qualifyForYoloGstGrant = new ArrayList<>();
+
+		for (Household household : households) {
+			Double totalAnnualIncome = 0.0;
+			for (FamilyMember familyMember : household.getFamilyMembers()) {
+				totalAnnualIncome += familyMember.getAnnualIncome();
+				if (totalAnnualIncome >= 100000) {
+					break;
+				}
+			}
+			if (totalAnnualIncome < 100000) {
+				qualifyForYoloGstGrant.add(household);
+			}
+		}
+
+		return qualifyForYoloGstGrant;
+	}
+
+	private int getAge(Date dateOfBirth) {
+		Calendar c = Calendar.getInstance();
+		c.setTime(dateOfBirth);
+		LocalDate l = LocalDate.of(c.get(Calendar.YEAR), c.get(Calendar.MONTH) + 1, c.get(Calendar.DATE));
+		LocalDate now = LocalDate.now();
+		Period diff = Period.between(l, now);
+		return diff.getYears();
+	}
+
 }
