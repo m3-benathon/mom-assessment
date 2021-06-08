@@ -11,7 +11,10 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Formula;
+
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity
@@ -28,6 +31,14 @@ public class Household {
 
 	@OneToMany(mappedBy = "household", cascade = CascadeType.ALL)
 	private List<FamilyMember> familyMembers;
+
+	@Formula("(SELECT COUNT(*) FROM family_member fm WHERE fm.household_id = id)")
+	@JsonIgnore
+	private Integer householdSize;
+
+	@Formula("(SELECT SUM(fm.annual_income) FROM family_member fm WHERE fm.household_id = id)")
+	@JsonIgnore
+	private Double totalAnnualIncome;
 
 	public Long getId() {
 		return id;
@@ -51,6 +62,22 @@ public class Household {
 
 	public void setFamilyMembers(List<FamilyMember> familyMembers) {
 		this.familyMembers = familyMembers;
+	}
+
+	public Integer getHouseholdSize() {
+		return householdSize;
+	}
+
+	public void setHouseholdSize(Integer householdSize) {
+		this.householdSize = householdSize;
+	}
+
+	public Double getTotalAnnualIncome() {
+		return totalAnnualIncome;
+	}
+
+	public void setTotalAnnualIncome(Double totalAnnualIncome) {
+		this.totalAnnualIncome = totalAnnualIncome;
 	}
 
 }

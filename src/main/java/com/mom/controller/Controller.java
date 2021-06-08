@@ -123,28 +123,31 @@ public class Controller {
 
 	@GetMapping("/households/getQualifyForStudentEncouragementBonus")
 	public List<Household> getQualifyForStudentEncouragementBonus(
-			@RequestParam(required = false) List<String> housingTypes) {
+			@RequestParam(required = false) List<String> housingTypes,
+			@RequestParam(required = false, defaultValue = "1") Integer householdSizeMin,
+			@RequestParam(required = false) Integer householdSizeMax,
+			@RequestParam(required = false) Double totalAnnualIncomeMin) {
 		Map<String, Object> searchParams = new HashMap<>();
 		if (housingTypes != null) {
 			searchParams.put("housingTypes", housingTypes);
 		}
+		searchParams.put("householdSizeMin", householdSizeMin);
+		if (householdSizeMax != null) {
+			searchParams.put("householdSizeMax", householdSizeMax);
+		}
+		if (totalAnnualIncomeMin != null) {
+			searchParams.put("totalAnnualIncomeMin", totalAnnualIncomeMin);
+		}
+		searchParams.put("totalAnnualIncomeMax", 150000.0);
 		List<Household> households = householdRepository.search(searchParams);
 		List<Household> qualifyForStudentEncouragementBonus = new ArrayList<>();
 
 		for (Household household : households) {
-			Double totalAnnualIncome = 0.0;
-			Boolean hasChildLessThan16 = false;
 			for (FamilyMember familyMember : household.getFamilyMembers()) {
-				totalAnnualIncome += familyMember.getAnnualIncome();
 				if (getAge(familyMember.getDateOfBirth()) < 16) {
-					hasChildLessThan16 = true;
-				}
-				if (totalAnnualIncome >= 150000) {
+					qualifyForStudentEncouragementBonus.add(household);
 					break;
 				}
-			}
-			if (hasChildLessThan16 && totalAnnualIncome < 150000) {
-				qualifyForStudentEncouragementBonus.add(household);
 			}
 		}
 
@@ -153,10 +156,24 @@ public class Controller {
 
 	@GetMapping("/households/getQualifyForFamilyTogethernessScheme")
 	public List<Household> getQualifyForFamilyTogethernessScheme(
-			@RequestParam(required = false) List<String> housingTypes) {
+			@RequestParam(required = false) List<String> housingTypes,
+			@RequestParam(required = false, defaultValue = "3") Integer householdSizeMin,
+			@RequestParam(required = false) Integer householdSizeMax,
+			@RequestParam(required = false) Double totalAnnualIncomeMin,
+			@RequestParam(required = false) Double totalAnnualIncomeMax) {
 		Map<String, Object> searchParams = new HashMap<>();
 		if (housingTypes != null) {
 			searchParams.put("housingTypes", housingTypes);
+		}
+		searchParams.put("householdSizeMin", householdSizeMin);
+		if (householdSizeMax != null) {
+			searchParams.put("householdSizeMax", householdSizeMax);
+		}
+		if (totalAnnualIncomeMin != null) {
+			searchParams.put("totalAnnualIncomeMin", totalAnnualIncomeMin);
+		}
+		if (totalAnnualIncomeMax != null) {
+			searchParams.put("totalAnnualIncomeMax", totalAnnualIncomeMax);
 		}
 		List<Household> households = householdRepository.search(searchParams);
 		List<Household> qualifyForFamilyTogethernessScheme = new ArrayList<>();
@@ -188,12 +205,25 @@ public class Controller {
 	}
 
 	@GetMapping("/households/getQualifyForHDBElderBonus")
-	public List<Household> getQualifyForHDBElderBonus() {
+	public List<Household> getQualifyForHDBElderBonus(
+			@RequestParam(required = false, defaultValue = "1") Integer householdSizeMin,
+			@RequestParam(required = false) Integer householdSizeMax,
+			@RequestParam(required = false) Double totalAnnualIncomeMin,
+			@RequestParam(required = false) Double totalAnnualIncomeMax) {
 		Map<String, Object> searchParams = new HashMap<>();
 		List<String> housingTypes = new ArrayList<>();
 		housingTypes.add("HDB");
 		searchParams.put("housingTypes", housingTypes);
-
+		searchParams.put("householdSizeMin", householdSizeMin);
+		if (householdSizeMax != null) {
+			searchParams.put("householdSizeMax", householdSizeMax);
+		}
+		if (totalAnnualIncomeMin != null) {
+			searchParams.put("totalAnnualIncomeMin", totalAnnualIncomeMin);
+		}
+		if (totalAnnualIncomeMax != null) {
+			searchParams.put("totalAnnualIncomeMax", totalAnnualIncomeMax);
+		}
 		List<Household> households = householdRepository.search(searchParams);
 		List<Household> qualifyForHDBElderBonus = new ArrayList<>();
 
@@ -210,12 +240,25 @@ public class Controller {
 	}
 
 	@GetMapping("/households/getQualifyForBabySunshineGrant")
-	public List<Household> getQualifyForBabySunshineGrant(@RequestParam(required = false) List<String> housingTypes) {
+	public List<Household> getQualifyForBabySunshineGrant(@RequestParam(required = false) List<String> housingTypes,
+			@RequestParam(required = false, defaultValue = "1") Integer householdSizeMin,
+			@RequestParam(required = false) Integer householdSizeMax,
+			@RequestParam(required = false) Double totalAnnualIncomeMin,
+			@RequestParam(required = false) Double totalAnnualIncomeMax) {
 		Map<String, Object> searchParams = new HashMap<>();
 		if (housingTypes != null) {
 			searchParams.put("housingTypes", housingTypes);
 		}
-
+		searchParams.put("householdSizeMin", householdSizeMin);
+		if (householdSizeMax != null) {
+			searchParams.put("householdSizeMax", householdSizeMax);
+		}
+		if (totalAnnualIncomeMin != null) {
+			searchParams.put("totalAnnualIncomeMin", totalAnnualIncomeMin);
+		}
+		if (totalAnnualIncomeMax != null) {
+			searchParams.put("totalAnnualIncomeMax", totalAnnualIncomeMax);
+		}
 		List<Household> households = householdRepository.search(searchParams);
 		List<Household> qualifyForBabySunshineGrant = new ArrayList<>();
 
@@ -232,29 +275,25 @@ public class Controller {
 	}
 
 	@GetMapping("/households/getQualifyForYoloGstGrant")
-	public List<Household> getQualifyForYoloGstGrant() {
+	public List<Household> getQualifyForYoloGstGrant(
+			@RequestParam(required = false, defaultValue = "1") Integer householdSizeMin,
+			@RequestParam(required = false) Integer householdSizeMax,
+			@RequestParam(required = false) Double totalAnnualIncomeMin) {
 		Map<String, Object> searchParams = new HashMap<>();
 		List<String> housingTypes = new ArrayList<>();
 		housingTypes.add("HDB");
 		searchParams.put("housingTypes", housingTypes);
-
-		List<Household> households = householdRepository.search(searchParams);
-		List<Household> qualifyForYoloGstGrant = new ArrayList<>();
-
-		for (Household household : households) {
-			Double totalAnnualIncome = 0.0;
-			for (FamilyMember familyMember : household.getFamilyMembers()) {
-				totalAnnualIncome += familyMember.getAnnualIncome();
-				if (totalAnnualIncome >= 100000) {
-					break;
-				}
-			}
-			if (totalAnnualIncome < 100000) {
-				qualifyForYoloGstGrant.add(household);
-			}
+		searchParams.put("householdSizeMin", householdSizeMin);
+		if (householdSizeMax != null) {
+			searchParams.put("householdSizeMax", householdSizeMax);
 		}
+		if (totalAnnualIncomeMin != null) {
+			searchParams.put("totalAnnualIncomeMin", totalAnnualIncomeMin);
+		}
+		searchParams.put("totalAnnualIncomeMax", 100000.0);
+		List<Household> households = householdRepository.search(searchParams);
 
-		return qualifyForYoloGstGrant;
+		return households;
 	}
 
 	private int getAge(Date dateOfBirth) {
