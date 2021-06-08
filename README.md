@@ -47,29 +47,29 @@ Rules/options/assumptions for all the variables:
    - require the id of the other family member (spouse)
 
 Grant Schemes APIs:
-1. Student Encouragement Bonus
+1. Student Encouragement Bonus (/getQualifyForStudentEncouragementBonus)
    - available search parameters:
      1. housingTypes - available options: HDB, Landed, Condominium
      2. householdSizeMin - default set as 1
      3. householdSizeMax
      4. totalAnnualIncomeMin
-   - default will get all households with at least 1 family member that is under 16 years old and total annual income is less than $150,000
-2. Family Togetherness Scheme
+   - default will get all households with at least 1 family member that is under 16 years old and total annual income that is less than $150,000
+2. Family Togetherness Scheme (/getQualifyForFamilyTogethernessScheme)
    - available search parameters:
      1. housingTypes - available options: HDB, Landed, Condominium
      2. householdSizeMin - default set as 3
      3. householdSizeMax
      4. totalAnnualIncomeMin
      5. totalAnnualIncomeMax
-   - default will get all households with at least 1 family member that is under 18 years old, at least 1 family member has spouse of opposite gender and household size of at least 3
-3. HDB Elder Bonus
+   - default will get all households with at least 1 family member that is under 18 years old, at least 1 family member that has spouse of opposite gender and household size of at least 3
+3. HDB Elder Bonus (/getQualifyForHDBElderBonus)
    - available search parameters:
      1. householdSizeMin - default set as 1
      2. householdSizeMax
      3. totalAnnualIncomeMin
      4. totalAnnualIncomeMax
    - default will get all households with housing type that is HDB and at least 1 family member that is above 50 years old
-4. Baby Sunshine Grant
+4. Baby Sunshine Grant (/getQualifyForBabySunshineGrant)
    - available search parameters:
      1. housingTypes - available options: HDB, Landed, Condominium
      2. householdSizeMin - default set as 2
@@ -77,9 +77,9 @@ Grant Schemes APIs:
      4. totalAnnualIncomeMin
      5. totalAnnualIncomeMax
    - default will get all households with at least one family member that is under 5 years old and household size of at least 2
-5. YOLO GST Grant
+5. YOLO GST Grant (/getQualifyForYoloGstGrant)
    - available search parameters:
      1. householdSizeMin - default set as 1
      2. householdSizeMax
      3. totalAnnualIncomeMin
-   - default will get all households with housing type that is HDB and total annual income is less than $100,000
+   - default will get all households with housing type that is HDB and total annual income that is less than $100,000
