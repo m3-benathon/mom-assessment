@@ -20,7 +20,7 @@ For creating new household, use the content in create-household-json.txt which r
 - Condominium
 
 For creating new family member, use the content in create-family-member-without-spouse-json.txt or create-family-member-with-spouse-json.txt which resides in json folder.
-You will need the household id from househole creation to create family members.
+You will need the household id from household creation to create family members.
 Rules/options/assumptions for all the variables:
 1. name
    - any name that the length is not empty and not more than 255 characters
@@ -44,8 +44,9 @@ Rules/options/assumptions for all the variables:
    - can only be added after the other family member (spouse) is created
    - will auto update the other family member (spouse)
    - spouse must be in the same household
+   - require the id of the other family member (spouse)
 
-Grant Schemes API:
+Grant Schemes APIs:
 1. Student Encouragement Bonus
    - available search parameters:
      1. housingTypes - available options: HDB, Landed, Condominium
